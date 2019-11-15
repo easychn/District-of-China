@@ -21,10 +21,12 @@ public class DistrictServiceImpl implements DistrictService {
         String targetFile = dataPath + "/test.csv";
         String provincesFile = dataPath + "/provinces.csv";
         String citiesFile = dataPath + "/cities.csv";
+        String areasFile = dataPath + "/areas.csv";
         CsvReader reader = new CsvReader(srcCSV, ',', Charset.forName("UTF-8"));
         CsvWriter write =new CsvWriter(targetFile,',',Charset.forName("UTF-8"));
         CsvWriter provincesWrite =new CsvWriter(provincesFile,',',Charset.forName("UTF-8"));
         CsvWriter citiesWrite =new CsvWriter(citiesFile,',',Charset.forName("UTF-8"));
+        CsvWriter areasWrite =new CsvWriter(areasFile,',',Charset.forName("UTF-8"));
         //各字段以引号标记
         write.setForceQualifier(true);
         //路过表头
@@ -61,7 +63,11 @@ public class DistrictServiceImpl implements DistrictService {
                     citiesWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1],String.valueOf((code - province)/100)});
                 }
                 
-              
+
+                if(province > 0 && city > 0) {
+                    System.err.println("写入区第" + reader.getCurrentRecord() + "条记录：" + reader.getValues()[0]  + "," + reader.getValues()[1]);
+                    areasWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1],String.valueOf(code - city)});
+                }
 
                 write.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1]});
             }
@@ -71,5 +77,6 @@ public class DistrictServiceImpl implements DistrictService {
         write.close();
         provincesWrite.close();
         citiesWrite.close();
+        areasWrite.close();
     }
 }
