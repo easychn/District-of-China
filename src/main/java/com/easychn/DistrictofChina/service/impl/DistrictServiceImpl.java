@@ -19,8 +19,12 @@ public class DistrictServiceImpl implements DistrictService {
         String dataPath = this.getClass().getResource("/data").getPath();
         String srcCSV =  dataPath + "/district-of-China-mainland.csv";
         String targetFile = dataPath + "/test.csv";
+        String provincesFile = dataPath + "/provinces.csv";
+        String citiesFile = dataPath + "/cities.csv";
         CsvReader reader = new CsvReader(srcCSV, ',', Charset.forName("UTF-8"));
         CsvWriter write =new CsvWriter(targetFile,',',Charset.forName("UTF-8"));
+        CsvWriter provincesWrite =new CsvWriter(provincesFile,',',Charset.forName("UTF-8"));
+        CsvWriter citiesWrite =new CsvWriter(citiesFile,',',Charset.forName("UTF-8"));
         //各字段以引号标记
         write.setForceQualifier(true);
         //路过表头
@@ -43,12 +47,29 @@ public class DistrictServiceImpl implements DistrictService {
                 tmp[1]="空";
                 write.writeRecord(tmp);
             }else{
-                System.err.println("写入第" + reader.getCurrentRecord() + "条记录：" + reader.getValues()[0]  + "," + reader.getValues()[1]);
+                int code = Integer.parseInt(reader.getValues()[0]);
+                int province = code % 10000;
+                System.err.println("province: "+ province);
+                if(province == 0) {
+                    System.err.println("写入省第" + reader.getCurrentRecord() + "条记录：" + reader.getValues()[0]  + "," + reader.getValues()[1]);
+                    provincesWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1]});
+                }
+                int city = code % 100;
+                System.err.println("city: "+ city);
+                if(province > 0 && city == 0) {
+                    System.err.println("写入市第" + reader.getCurrentRecord() + "条记录：" + reader.getValues()[0]  + "," + reader.getValues()[1]);
+                    citiesWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1],String.valueOf((code - province)/100)});
+                }
+                
+              
+
                 write.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1]});
             }
         }
 
         reader.close();
         write.close();
+        provincesWrite.close();
+        citiesWrite.close();
     }
 }
