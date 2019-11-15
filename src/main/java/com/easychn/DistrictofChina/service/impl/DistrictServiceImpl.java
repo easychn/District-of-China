@@ -5,11 +5,10 @@ import org.springframework.stereotype.Service;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
+
 
 import com.easychn.DistrictOfChina.service.DistrictService;
 
@@ -17,8 +16,9 @@ import com.easychn.DistrictOfChina.service.DistrictService;
 public class DistrictServiceImpl implements DistrictService {
 
     public void getDistrictDataSource () throws IOException{
-        String srcCSV = "resources/data/district-of-China-mainland.csv";
-        String targetFile = "resources/data/test.csv";
+        String dataPath = this.getClass().getResource("/data").getPath();
+        String srcCSV =  dataPath + "/district-of-China-mainland.csv";
+        String targetFile = dataPath + "test.csv";
         CsvReader reader = new CsvReader(srcCSV, ',', Charset.forName("UTF-8"));
         CsvWriter write =new CsvWriter(targetFile,',',Charset.forName("UTF-8"));
         //各字段以引号标记
