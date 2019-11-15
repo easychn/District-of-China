@@ -1,4 +1,4 @@
-package com.easychn.DistrictofChina;
+package com.easychn.DistrictOfChina;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
