@@ -54,19 +54,19 @@ public class DistrictServiceImpl implements DistrictService {
                 System.err.println("province: "+ province);
                 if(province == 0) {
                     System.err.println("写入省第" + reader.getCurrentRecord() + "条记录：" + reader.getValues()[0]  + "," + reader.getValues()[1]);
-                    provincesWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1]});
+                    provincesWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1],"1","0"});
                 }
                 int city = code % 100;
                 System.err.println("city: "+ city);
                 if(province > 0 && city == 0) {
                     System.err.println("写入市第" + reader.getCurrentRecord() + "条记录：" + reader.getValues()[0]  + "," + reader.getValues()[1]);
-                    citiesWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1],String.valueOf((code - province)/100)});
+                    citiesWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1],"2",String.valueOf(code - province)});
                 }
                 
 
                 if(province > 0 && city > 0) {
                     System.err.println("写入区第" + reader.getCurrentRecord() + "条记录：" + reader.getValues()[0]  + "," + reader.getValues()[1]);
-                    areasWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1],String.valueOf(code - city)});
+                    areasWrite.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1],"3",String.valueOf(code - city)});
                 }
 
                 write.writeRecord(new String[]{reader.getValues()[0],reader.getValues()[1]});
